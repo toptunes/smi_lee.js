@@ -155,7 +155,7 @@ function not_login_custom(formname, who, fname) {
 
     var uuu = document.getElementById('username').value;
     var ppp = document.getElementById('password').value;
-    var whatfor = "plt.php?q=&nav=1";
+    var whatfor = "/?q=&nav=1";
     app.get_https(whatfor, 0, whatdef_at_end, null, timetodo, uuu, ppp);
 
 
@@ -163,7 +163,7 @@ function not_login_custom(formname, who, fname) {
 }
 
 function runmini(param1) {
-    app.get_https("plt.php?q=" + param1 + "&nav=1", 1, whatdef_at_end);
+    app.get_https("/?q=" + param1 + "&nav=1", 1, whatdef_at_end);
 
 }
 
@@ -206,7 +206,7 @@ function at_end_login(at_end) {
     var passw = document.getElementById('password');
     var hash = document.getElementById('hash');
     if (usern !== null && hash !== null) {
-        var whatfor = "plt.php?q=profile&nav=1";
+        var whatfor = "/?q=profile&nav=1";
         app.get_https(whatfor, 0, whatdef_at_end, null, timetodo, usern.value, passw.value);
         app.setOption("hash", hash.value);
 
@@ -220,7 +220,7 @@ function at_end_login(at_end) {
 function log_out_custom(formname, who, fname) {
 
 
-    var whatfor = "plt.php?q=logout&nav=1";
+    var whatfor = "/?q=logout&nav=1";
 
     app.get_https(whatfor, 0, "after_logout", null, timetodo, null, null);
 
@@ -230,7 +230,7 @@ function log_out_custom(formname, who, fname) {
 function after_logout(formname, who, fname) {
 
 
-    var whatfor = "plt.php?q=fill_it&o=2&module_name=fill_products_list&nav=1";
+    var whatfor = "/?q=fill_it&o=2&module_name=fill_products_list&nav=1";
 
     app.get_https(whatfor, 0, whatdef_at_end, null, timetodo, null, null);
     replaceState_me("1", "/", "/");
@@ -346,7 +346,7 @@ function onload_Listener(parameterName, param, who, fn, fname, locateat, kind, a
                     window[parameterName](param, who, fname);
                 } else {
                     app.setVar('run_executer', '1');
-                    app.get_https("plt.php" + "?q=" + param + "&w=" + who + "&locateat=" + locateat, 0, whatdef_at_end, at_end_run);
+                    app.get_https("/" + "?q=" + param + "&w=" + who + "&locateat=" + locateat, 0, whatdef_at_end, at_end_run);
                 }
                 ////////////////									 
 
@@ -577,7 +577,7 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
 
     if (typeof noop == 'undefined') {
 
-        app.get_https_2("plt.php" + "?q=" + formname + "&locateat=" + locateat, names, at_end_run, at_end_run_2);
+        app.get_https_2("/" + "?q=" + formname + "&locateat=" + locateat, names, at_end_run, at_end_run_2);
 
 
     } else {
@@ -669,13 +669,13 @@ function do_runData(param) {
         param_q = param;
     }
     if (param_q) {
-        whatfor = "plt.php?q=" + param_q + "&nav=1";
+        whatfor = "/?q=" + param_q + "&nav=1";
         app.get_https(whatfor, 0, whatdef_at_end);
 
         one_start_history = 2;
 
     } else {
-        whatfor = "plt.php?q=fill_it&o=2&module_name=fill_products_list&sql=1&w=null&locateat=null&nav=1&oneach=10&method=products_list";
+        whatfor = "/?q=fill_it&o=2&module_name=fill_products_list&sql=1&w=null&locateat=null&nav=1&oneach=10&method=products_list";
         app.get_https(whatfor, 0, whatdef_at_end, "", timetodo);
 
 
