@@ -1,5 +1,5 @@
 //Smi_lee is part of https://github.com/toptunes/Smile_Engine-Demo . This is factory pattern
-// author : Mohammad (dehaz) Norouzi
+// author : Mohammad (dehaz) Norouzi 
 
 var h_smi_lee = [];
 var do_history = 0;
