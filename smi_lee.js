@@ -64,8 +64,8 @@ function make_array_from_input_m_forms(data,element,input_name){
  	let names;
  	let that_set;
 	that_set = new Set();
-	
- 	for (var i = 0; i < element.length; i++) {
+	var length_of = element.length;
+ 	for (var i = 0; i < length_of; i++) {
 		
 		if(element[i].name == input_name){
 			
@@ -258,7 +258,8 @@ listener_key("keydown");
     var fn;
     var fname;
     var locateat;
-    for (var i = 0; i < elements.length; i++) {
+    var length_of = elements.length;
+    for (var i = 0; i < length_of; i++) {
 
         if (elements[i].id.includes(")") === false) {
 
@@ -424,7 +425,8 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
     var msgg;
     var stopsecmsg;
 	var array_type;
-    for (var i = 0; i < elements.length; i++) {
+    var length_of = elements.length;
+    for (var i = 0; i < length_of; i++) {
 
         req = elements[i].getAttribute('data-req');
         upld = elements[i].getAttribute('data-upload');
@@ -848,7 +850,8 @@ function calc_data_db(data) {
 
     var testRE = regExString.exec(data);
 
-    if (testRE && testRE.length > 1) {
+    var length_of = testRE.length;
+    if (testRE && length_of > 1) {
 
         data = data.replace(fvariable + testRE[1] + svariable, "");
         app.setOption("html_final", data);
@@ -970,8 +973,8 @@ function json_more_t_one(data, json, access, method_fill) {
 
     if (method_fill.includes(';')) {
 
-
-        for (let i = 0; i < arrayy.length; i++) {
+        var length_of = arrayy.length;
+        for (let i = 0; i < length_of; i++) {
             method_fill = arrayy[i];
 
 
@@ -1294,7 +1297,8 @@ if((document.activeElement.tagName).toLowerCase() =="input" ){
 
                     if (finaly_is == 1) {
                         var e_lements = document.getElementById(idofthatsub).getElementsByClassName("btn_id");
-                        for (var i = 0; i < e_lements.length; i++) {
+                        var length_of = length;
+                        for (var i = 0; i < length_of; i++) {
                             e_lements[i].click();
                         }
                     }
@@ -1402,7 +1406,9 @@ if((document.activeElement.tagName).toLowerCase() =="input" ){
 
                 if (finaly_is == 1) {
                     var e_lements = document.getElementById(idofthatsub).getElementsByClassName("btn_id");
-                    for (var i = 0; i < e_lements.length; i++) {
+                    var length_of = e_lements.length;
+
+                    for (var i = 0; i < length_of; i++) {
 
                         if (e_lements[i].id.includes("_submit")) {
                             e_lements[i].click();
@@ -1477,7 +1483,9 @@ function filterFunction(whatisinput, whatiselement, shouldforcefill) {
     div = document.getElementById(whatiselement);
     a = div.getElementsByTagName("a");
     var shomaresh = 0;
-    for (i = 0; i < a.length; i++) {
+    var length_of = a.length;
+
+    for (i = 0; i < length_of; i++) {
         txtValue = a[i].textContent || a[i].innerText;
 
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -1491,7 +1499,7 @@ function filterFunction(whatisinput, whatiselement, shouldforcefill) {
 
     }
 
-    var ree = a.length - shomaresh;
+    var ree = length_of - shomaresh;
 
     if (ree == 0) {
         app.setVar('thiselementfury', whatiselement);
@@ -1519,7 +1527,8 @@ function closeModal() {
 
     const elements = document.getElementsByClassName('offcanvas-backdrop');
     if (elements !== null) {
-        while (elements.length > 0) {
+        var length_of = elements.length;
+        while (length_of > 0) {
             elements[0].parentNode.removeChild(elements[0]);
         }
     }
@@ -1532,7 +1541,9 @@ function click_it(id_click, multi) {
     } else {
 
         var elements = document.getElementsByClassName("input_m_form");
-        for (var i = 0; i < elements.length; i++) {
+        var length_of = elements.length;
+        for (var i = 0; i < length_of; i++) {
+
 
             if (elements[i].type === "file" && elements[i].files.length == 0)
 
