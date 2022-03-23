@@ -5,7 +5,7 @@ smi_lee.js is a Lightweight and general purpose JS library of ![Smile Engine](ht
 
 How to use :
 
-This is compatible with Smile Engine architecture and you need to know how Smile Engine work
+This is compatible with Smile Engine architecture. and you must to know how Smile Engine work
 
 ![Smile Engine](https://github.com/toptunes/Smile_Engine-Demo)
 
