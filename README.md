@@ -1,7 +1,7 @@
 # smi_lee.js
 
-smilee.js is a Lightweight JS library of ![Smile Engine](https://github.com/toptunes/Smile_Engine-Demo) (PHP Full Stack framework) without this, I should have used vue.js or react or other stuff.
-
+smi_lee.js is a Lightweight JS library of ![Smile Engine](https://github.com/toptunes/Smile_Engine-Demo) (PHP Full Stack framework) without this, I should have used vue.js or react or other deep stuff.
+(I'm not front-end developer)
 
 How to use :
 
