@@ -8,6 +8,7 @@ var current_url;
 var dear_app;
 var dear_nav;
 var app_msg;
+var app_id = "app";
 var mod_el = 0;
 var allow = 1;
 var result = 2;
@@ -16,13 +17,54 @@ var timetodo = 0;
 var header_save_url = "";
 var rnd_nm_pho = Math.floor(Math.random() * 100000);
 var whatdef_at_end = "";
-var handler_name= "";
-
 
 dear_app = "dear_app";
 dear_nav = "dear_nav";
 app_msg = "app_msg";
 whatdef_at_end = "do_after_done";
+
+var store = {};
+setVar('devicePlatform', '/app/views/html');
+
+on_app_RUN(store.devicePlatform + "/mohammad_norouzi_app.php"); // Run application
+
+function setOption(key, value) {
+    return localStorage.setItem(key, value);
+}
+
+function getOption(key, defaultValue) {
+    return localStorage.getItem(key) !== null ?
+        localStorage.getItem(key) : defaultValue;
+}
+
+
+function setVar(varName, varValue) {
+    store[varName] = varValue
+}
+
+function on_app_RUN(url) {
+
+    fetch(url).then(function (response) {
+        // The API call was successful!
+        return response.text();
+    }).then(function (html) {
+        // This is the HTML from our response as a text string
+
+        clear_loading();
+        document.getElementById(app_id).innerHTML = html;
+        // do_after_done(html);
+        check_https("plt.php" + "?q=mas");
+
+
+    }).catch(function (err) {
+        // There was an error
+        console.warn('Something went wrong.', err);
+    });
+
+}
+
+
+
 
 function clear_me(param) {
     var elem = document.getElementById(param);
@@ -32,7 +74,7 @@ function clear_me(param) {
         /*elem.classList.add("fade-out");	
 
         setTimeout(function(){ elem.innerHTML = "";  }, 500);
-        	*/
+            */
     }
 }
 
@@ -45,7 +87,7 @@ function fail_req(status, err, signal, myTimeout, whatfor, stop, whatafterrun, w
         timetodo = timetodo + 1;
         refresh_elements();
 
-        app.get_https(whatfor, stop, whatafterrun, whatafterrun_2, timetodo);
+        get_https(whatfor, stop, whatafterrun, whatafterrun_2, timetodo);
     }
 
 }
@@ -60,41 +102,41 @@ function close_mymodal(param) {
 
 
 }
-function make_array_from_input_m_forms(data,element,input_name){
- 	let names;
- 	let that_set;
-	that_set = new Set();
-	var length_of = element.length;
- 	for (var i = 0; i < length_of; i++) {
-		
-		if(element[i].name == input_name){
-			
- 			that_set.add(element[i].value);
-		}
+function make_array_from_input_m_forms(data, element, input_name) {
+    let names;
+    let that_set;
+    that_set = new Set();
 
-		
-	}
-	let that_array = Array.from(that_set);
-	// let that_array = [...that_set];
+    for (var i = 0; i < element.length; i++) {
 
- 
- 	names = data + " " + "\"" + input_name + "\"" + " : " + " " + "\"" + that_array.toString() + "\"" + ",";
-		
-	return names;
+        if (element[i].name == input_name) {
+
+            that_set.add(element[i].value);
+        }
+
+
+    }
+    let that_array = Array.from(that_set);
+    // let that_array = [...that_set];
+
+
+    names = data + " " + "\"" + input_name + "\"" + " : " + " " + "\"" + that_array.toString() + "\"" + ",";
+
+    return names;
 }
 
 
 function abort_controller(signal, controller, whatfor, stop, whatafterrun, whatafterrun_2) {
     timetodo = timetodo + 1;
     refresh_elements();
-    app.get_https(whatfor, stop, whatafterrun, whatafterrun_2, timetodo);
+    get_https(whatfor, stop, whatafterrun, whatafterrun_2, timetodo);
 
 }
 
 function abort_controller_2(controller_2, whatfor, datastring, whatafterrun, whatafterrun_2) {
     controller_2.abort();
     refresh_elements();
-    app.get_https_2(whatfor, datastring, whatafterrun, whatafterrun_2);
+    get_https_2(whatfor, datastring, whatafterrun, whatafterrun_2);
 }
 
 function alert_2time(param, param2) {
@@ -157,15 +199,15 @@ function not_login_custom(formname, who, fname) {
 
     var uuu = document.getElementById('username').value;
     var ppp = document.getElementById('password').value;
-    var whatfor = handler_name+"/?q=&nav=1";
-    app.get_https(whatfor, 0, whatdef_at_end, null, timetodo, uuu, ppp);
+    var whatfor = "plt.php?q=&nav=1";
+    get_https(whatfor, 0, whatdef_at_end, null, timetodo, uuu, ppp);
 
 
 
 }
 
 function runmini(param1) {
-    app.get_https(handler_name+"/?q=" + param1 + "&nav=1", 1, whatdef_at_end);
+    get_https("plt.php?q=" + param1 + "&nav=1", 1, whatdef_at_end);
 
 }
 
@@ -208,9 +250,9 @@ function at_end_login(at_end) {
     var passw = document.getElementById('password');
     var hash = document.getElementById('hash');
     if (usern !== null && hash !== null) {
-        var whatfor = handler_name+"/?q=profile&nav=1";
-        app.get_https(whatfor, 0, whatdef_at_end, null, timetodo, usern.value, passw.value);
-        app.setOption("hash", hash.value);
+        var whatfor = "plt.php?q=profile&nav=1";
+        get_https(whatfor, 0, whatdef_at_end, null, timetodo, usern.value, passw.value);
+        setOption("hash", hash.value);
 
         replaceState_me("1", "/profile", "/profile");
     }
@@ -222,9 +264,9 @@ function at_end_login(at_end) {
 function log_out_custom(formname, who, fname) {
 
 
-    var whatfor = handler_name+"/?q=logout&nav=1";
+    var whatfor = "plt.php?q=logout&nav=1";
 
-    app.get_https(whatfor, 0, "after_logout", null, timetodo, null, null);
+    get_https(whatfor, 0, "after_logout", null, timetodo, null, null);
 
 
 }
@@ -232,9 +274,9 @@ function log_out_custom(formname, who, fname) {
 function after_logout(formname, who, fname) {
 
 
-    var whatfor = handler_name+"/?q=fill_it&o=2&module_name=fill_products_list&nav=1";
+    var whatfor = "plt.php?q=fill_it&o=2&module_name=fill_products_list&nav=1";
 
-    app.get_https(whatfor, 0, whatdef_at_end, null, timetodo, null, null);
+    get_https(whatfor, 0, whatdef_at_end, null, timetodo, null, null);
     replaceState_me("1", "/", "/");
 
 
@@ -258,8 +300,7 @@ listener_key("keydown");
     var fn;
     var fname;
     var locateat;
-    var length_of = elements.length;
-    for (var i = 0; i < length_of; i++) {
+    for (var i = 0; i < elements.length; i++) {
 
         if (elements[i].id.includes(")") === false) {
 
@@ -299,9 +340,9 @@ function onload_Listener(parameterName, param, who, fn, fname, locateat, kind, a
 
 
 
-        that_element.addEventListener(kind, function(event) {
+        that_element.addEventListener(kind, function (event) {
 
-            app.setVar('locate_at', locateat);
+            setVar('locate_at', locateat);
 
             event.preventDefault(); /* for disable click href */
 
@@ -326,7 +367,7 @@ function onload_Listener(parameterName, param, who, fn, fname, locateat, kind, a
 
 
 
-            app.setVar('at_end', at_end_run);
+            setVar('at_end', at_end_run);
 
             if (at_click_run != null) {
                 whatdef_at_end = at_click_run;
@@ -348,8 +389,8 @@ function onload_Listener(parameterName, param, who, fn, fname, locateat, kind, a
                     parameterName = parameterName.replace(/ *\([^)]*\) */g, "");
                     window[parameterName](param, who, fname);
                 } else {
-                    app.setVar('run_executer', '1');
-                    app.get_https(handler_name+"/" + "?q=" + param + "&w=" + who + "&locateat=" + locateat, 0, whatdef_at_end, at_end_run);
+                    setVar('run_executer', '1');
+                    get_https("plt.php" + "?q=" + param + "&w=" + who + "&locateat=" + locateat, 0, whatdef_at_end, at_end_run);
                 }
                 ////////////////									 
 
@@ -384,7 +425,7 @@ function scroll_top(param) {
 }
 
 function fil_ter_nosymbol(str) {
-   // str = str.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+    // str = str.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
     return str;
 }
 
@@ -393,7 +434,7 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
 
     scroll_top();
 
-    app.setVar('count', -1);
+    setVar('count', -1);
     setTimeout(hide_alert, 20000);
     document.getElementById("app_msg").innerHTML = "";
     var form_box_element = that_element;
@@ -424,13 +465,12 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
     var f_length;
     var msgg;
     var stopsecmsg;
-	var array_type;
-    var length_of = elements.length;
-    for (var i = 0; i < length_of; i++) {
+    var array_type;
+    for (var i = 0; i < elements.length; i++) {
 
         req = elements[i].getAttribute('data-req');
         upld = elements[i].getAttribute('data-upload');
-		array_type = elements[i].getAttribute('array-type');
+        array_type = elements[i].getAttribute('array-type');
         f_length = elements[i].getAttribute('force-length');
         msgg = elements[i].getAttribute('data-msg');
         if (msgg == null) {
@@ -455,13 +495,13 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
         if (upld == 1) {
             req = 1;
         }
-		
- 		if (array_type != null) {
- 		array_type = "array_type";
-        }else{
- 		array_type = false;
-		}
-	
+
+        if (array_type != null) {
+            array_type = "array_type";
+        } else {
+            array_type = false;
+        }
+
 
 
         if (req == 1) {
@@ -522,7 +562,7 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
             var valueofmi;
             var valueofvalue;
             var typev = array_type ? array_type : elements[i].type;
-			
+
             switch (typev) {
                 case "checkbox":
 
@@ -541,10 +581,10 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
 
                     break;
                 case "array_type":
-				
-				names = make_array_from_input_m_forms(names,elements,elements[i].name);
 
-					
+                    names = make_array_from_input_m_forms(names, elements, elements[i].name);
+
+
                     break;
                 case "radio":
                     if (elements[i].checked) {
@@ -581,7 +621,7 @@ function gather_form(formname, element, who, locateat, that_element, at_end_run,
 
     if (typeof noop == 'undefined') {
 
-        app.get_https_2(handler_name+"/" + "?q=" + formname + "&locateat=" + locateat, names, at_end_run, at_end_run_2);
+        get_https_2("plt.php" + "?q=" + formname + "&locateat=" + locateat, names, at_end_run, at_end_run_2);
 
 
     } else {
@@ -599,13 +639,13 @@ function refresh_elements(obj_id) {
     }else{
     document.getElementById("view1").innerHTML = document.getElementById("view1").innerHTML;
     }
-    	*/
+        */
     /*
-    	dearelements =  document.querySelectorAll(".dear_element");	
-    	for(var i=0; i < dearelements.length; i++) {
+        dearelements =  document.querySelectorAll(".dear_element");	
+        for(var i=0; i < dearelements.length; i++) {
     dearelements[i].innerHTML = dearelements[i].innerHTML; 	
-    		}
-    	*/
+            }
+        */
 
 
 
@@ -646,15 +686,15 @@ function do_onstart(result) {
 
     var obj_s = JSON.parse(JSON.stringify(result));
 
-    app.setOption("o_db", obj_s.run);
+    setOption("o_db", obj_s.run);
 
     document.getElementById("preload_html").innerHTML = decodeURIComponent(obj_s.preload_html);
 
 
     do_runData('url');
 
-    
-   
+
+
 
 }
 
@@ -673,14 +713,14 @@ function do_runData(param) {
         param_q = param;
     }
     if (param_q) {
-        whatfor = handler_name+"/?q=" + param_q + "&nav=1";
-        app.get_https(whatfor, 0, whatdef_at_end);
+        whatfor = "plt.php?q=" + param_q + "&nav=1";
+        get_https(whatfor, 0, whatdef_at_end);
 
         one_start_history = 2;
 
     } else {
-        whatfor = handler_name+"/?q=fill_it&o=2&module_name=fill_products_list&sql=1&w=null&locateat=null&nav=1&oneach=10&method=products_list";
-        app.get_https(whatfor, 0, whatdef_at_end, "", timetodo);
+        whatfor = "plt.php?q=fill_it&o=2&module_name=fill_products_list&sql=1&w=null&locateat=null&nav=1&oneach=10&method=products_list";
+        get_https(whatfor, 0, whatdef_at_end, "", timetodo);
 
 
 
@@ -729,7 +769,7 @@ function clear_loading() {
 }
 
 
-function get_error(url){
+function get_error(url) {
     clear_loading();
 
     fetch(url).then(function (response) {
@@ -737,7 +777,7 @@ function get_error(url){
         return response.text();
     }).then(function (html) {
         // This is the HTML from our response as a text string
-       
+
         document.getElementById(dear_app).innerHTML = html;
 
     }).catch(function (err) {
@@ -750,13 +790,13 @@ function get_error(url){
 function do_after_done(result, whatafterrun) {
     clear_loading();
 
- 
+
 
     const text = result;
     const obj = JSON.parse(JSON.stringify(text));
 
-   
-  
+
+
 
     nav_builder(dear_nav, obj.app_nav);
 
@@ -772,7 +812,7 @@ function do_after_done(result, whatafterrun) {
         if (obj.elementbox !== "") {
 
             if (document.getElementById(obj.elementbox).className.includes('dear_element')) {
-                    
+
                 just_put_it_located(decodeURIComponent(calc_data), obj.elementbox);
 
             } else {
@@ -781,14 +821,14 @@ function do_after_done(result, whatafterrun) {
 
         } else {
 
-            if(obj.case != "open_json"){
-                
+            if (obj.case != "open_json") {
+
                 just_put_it(calc_data, dear_app);
-            }else{
-                document.getElementById(dear_app).innerHTML='';
+            } else {
+                document.getElementById(dear_app).innerHTML = '';
 
             }
-            
+
 
 
         }
@@ -806,9 +846,9 @@ function do_after_done(result, whatafterrun) {
 
     } else {
 
-        
+
         fill_after_done(obj.Access, obj.app_data, obj.method_fill);
-       
+
     }
 
 
@@ -820,7 +860,7 @@ function do_after_done(result, whatafterrun) {
         if (whatafterrun.includes(";")) {
 
             let full_array = whatafterrun.split(';');
-          
+
             window[full_array[0]](full_array);
         } else {
             var data = 1;
@@ -866,11 +906,10 @@ function calc_data_db(data) {
 
     var testRE = regExString.exec(data);
 
-    var length_of = testRE.length;
-    if (testRE && length_of > 1) {
+    if (testRE && testRE.length > 1) {
 
         data = data.replace(fvariable + testRE[1] + svariable, "");
-        app.setOption("html_final", data);
+        setOption("html_final", data);
         var edited = html_final_edit(data, testRE[1]);
 
         return edited;
@@ -989,8 +1028,8 @@ function json_more_t_one(data, json, access, method_fill) {
 
     if (method_fill.includes(';')) {
 
-        var length_of = arrayy.length;
-        for (let i = 0; i < length_of; i++) {
+
+        for (let i = 0; i < arrayy.length; i++) {
             method_fill = arrayy[i];
 
 
@@ -1139,7 +1178,7 @@ function custom_onload_Listeners() {
 
     /*document.addEventListener("backbutton", backbutton_function(event), false);*/
 
-    document.addEventListener('backbutton', function() {
+    document.addEventListener('backbutton', function () {
 
         /*navigator.app.exitApp();*/
         alert('wow');
@@ -1150,12 +1189,12 @@ function custom_onload_Listeners() {
 
     var modal = document.getElementById("myModal");
     var span = document.getElementById("close_span");
-    span.onclick = function() {
+    span.onclick = function () {
         modal.style.display = "none";
         history_back(1);
 
     };
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
             history_back(1);
@@ -1167,7 +1206,7 @@ function custom_onload_Listeners() {
 
 
 
-    window.onpopstate = function(event) {
+    window.onpopstate = function (event) {
 
         // "event" object seems to contain value only when the back button is clicked
         // and if the pop state event fires due to clicks on a button
@@ -1187,7 +1226,7 @@ function custom_onload_Listeners() {
             for(var i=0; i < modals.length; i++) {
 
             alert(modals[i].style.zIndex);
-            								  
+                                              
             }*/
 
             if (modal != null && modal.style.display == 'block') {
@@ -1262,7 +1301,7 @@ function listener_key(idof, kind) {
     var keydown = false;
 
 
-    document.addEventListener(kind, function(event) {
+    document.addEventListener(kind, function (event) {
 
 
 
@@ -1279,7 +1318,7 @@ function listener_key(idof, kind) {
             if (event.key == 'Enter' || event.key == 'enter') {
 
 
-                if (upTo(document.activeElement, 'form') == null) {} else {
+                if (upTo(document.activeElement, 'form') == null) { } else {
 
                     var els = document.getElementById(idofthatsub).getElementsByClassName("input_m_form");
                     var howmany = els.length;
@@ -1288,7 +1327,7 @@ function listener_key(idof, kind) {
                     alert(current_name);
                     var howmany_1 = howmany;
                     var count = 1;
-                    Array.prototype.forEach.call(els, function(el) {
+                    Array.prototype.forEach.call(els, function (el) {
 
 
                         if (count == 1) {
@@ -1313,8 +1352,7 @@ if((document.activeElement.tagName).toLowerCase() =="input" ){
 
                     if (finaly_is == 1) {
                         var e_lements = document.getElementById(idofthatsub).getElementsByClassName("btn_id");
-                        var length_of = length;
-                        for (var i = 0; i < length_of; i++) {
+                        for (var i = 0; i < e_lements.length; i++) {
                             e_lements[i].click();
                         }
                     }
@@ -1386,7 +1424,7 @@ function listen_the_keys(e) {
             var finaly_is;
             var idofthatsub = upTo(document.activeElement, 'form').id;
             /////////////////////////////////////////////////////////								  
-            if (upTo(document.activeElement, 'form') == null) {} else {
+            if (upTo(document.activeElement, 'form') == null) { } else {
 
                 var els = document.getElementById(idofthatsub).getElementsByClassName("jm");
                 var howmany = els.length;
@@ -1395,7 +1433,7 @@ function listen_the_keys(e) {
 
                 var howmany_1 = howmany;
                 var count = 1;
-                Array.prototype.forEach.call(els, function(el) {
+                Array.prototype.forEach.call(els, function (el) {
 
 
                     if (count == 1) {
@@ -1422,9 +1460,7 @@ if((document.activeElement.tagName).toLowerCase() =="input" ){
 
                 if (finaly_is == 1) {
                     var e_lements = document.getElementById(idofthatsub).getElementsByClassName("btn_id");
-                    var length_of = e_lements.length;
-
-                    for (var i = 0; i < length_of; i++) {
+                    for (var i = 0; i < e_lements.length; i++) {
 
                         if (e_lements[i].id.includes("_submit")) {
                             e_lements[i].click();
@@ -1450,7 +1486,7 @@ function drop_that_list(whatiselement) {
     var cover = document.getElementById('cover');
     cover.style.display = "block";
     */
-    window.onclick = function(event) {
+    window.onclick = function (event) {
 
         if (event.target.id != whatiselement) {
             cvo.style.display = "none";
@@ -1466,8 +1502,8 @@ function drop_that_list(whatiselement) {
       if_show_hide(whatiselement+'list');
     filterFunction(document.getElementById(whatiselement).value,whatiselement+"list",1);
     });
-    								  
-    	*/
+                                      
+        */
 }
 
 function feed_parents(valuea, parent) {
@@ -1499,9 +1535,7 @@ function filterFunction(whatisinput, whatiselement, shouldforcefill) {
     div = document.getElementById(whatiselement);
     a = div.getElementsByTagName("a");
     var shomaresh = 0;
-    var length_of = a.length;
-
-    for (i = 0; i < length_of; i++) {
+    for (i = 0; i < a.length; i++) {
         txtValue = a[i].textContent || a[i].innerText;
 
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -1515,11 +1549,11 @@ function filterFunction(whatisinput, whatiselement, shouldforcefill) {
 
     }
 
-    var ree = length_of - shomaresh;
+    var ree = a.length - shomaresh;
 
     if (ree == 0) {
-        app.setVar('thiselementfury', whatiselement);
-        app.setVar('thiselementstatus', shouldforcefill);
+        setVar('thiselementfury', whatiselement);
+        setVar('thiselementstatus', shouldforcefill);
     }
 
 
@@ -1530,10 +1564,10 @@ function filterFunction(whatisinput, whatiselement, shouldforcefill) {
 function is_nes_fill_input(idofelement) {
 
 
-    if (app.store.thiselementstatus == '1') {
+    if (store.thiselementstatus == '1') {
         document.getElementById(idofelement).value = '';
-        app.setVar('thiselementfury', '');
-        app.setVar('thiselementstatus', '');
+        setVar('thiselementfury', '');
+        setVar('thiselementstatus', '');
     }
 
 }
@@ -1543,8 +1577,7 @@ function closeModal() {
 
     const elements = document.getElementsByClassName('offcanvas-backdrop');
     if (elements !== null) {
-        var length_of = elements.length;
-        while (length_of > 0) {
+        while (elements.length > 0) {
             elements[0].parentNode.removeChild(elements[0]);
         }
     }
@@ -1557,9 +1590,7 @@ function click_it(id_click, multi) {
     } else {
 
         var elements = document.getElementsByClassName("input_m_form");
-        var length_of = elements.length;
-        for (var i = 0; i < length_of; i++) {
-
+        for (var i = 0; i < elements.length; i++) {
 
             if (elements[i].type === "file" && elements[i].files.length == 0)
 
@@ -1627,7 +1658,7 @@ function handleFiles() {
 
 
     var limit = 10;
-    if (!this.files.length) {} else {
+    if (!this.files.length) { } else {
 
 
 
@@ -1684,7 +1715,7 @@ function handleFiles() {
                 img.height = 95;
 
 
-                img.onload = function() {
+                img.onload = function () {
                     URL.revokeObjectURL(this.src);
 
 
@@ -1786,7 +1817,7 @@ function success_upld(success, id_of, figcaption_id, innput_id, fille_name) {
         element.classList.add('alert-success');
     } else {
         document.getElementById(figcaption_id).innerHTML = success.status;
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById(id_of).remove();
         }, 9000);
 
@@ -1798,7 +1829,7 @@ function fail_upld(error, id_of, figcaption_id, innput_id, fille_name) {
     var element = document.getElementById(id_of);
     document.getElementById(figcaption_id).innerHTML = "آپلود نشد - این فیلد بعد از 9 ثانیه حذف میشود";
 
-    setTimeout(function() {
+    setTimeout(function () {
         document.getElementById(id_of).remove();
     }, 9000);
 
@@ -1808,14 +1839,14 @@ function fail_upld(error, id_of, figcaption_id, innput_id, fille_name) {
 
 
 function calc_what_name_db(input) {
-    if (typeof app.store.count == 'undefined') {
-        app.setVar('count', -1);
+    if (typeof store.count == 'undefined') {
+        setVar('count', -1);
     }
 
     var export_a, export_b;
     if (input.includes("combine_img")) {
-        app.setVar('count', app.store.count + 1);
-        export_a = "img_" + app.store.count;
+        setVar('count', store.count + 1);
+        export_a = "img_" + store.count;
     } else {
         export_a = input;
     }
@@ -1897,3 +1928,284 @@ function do_msg(param3) {
     }
 
 }
+
+function getvaluefrominput(idname) {
+    var msgbox;
+
+    var textcontent;
+    var e = document.getElementById(idname);
+
+    textcontent = e.value;
+    msgbox = e.placeholder;
+
+    if (!textcontent) {
+
+        document.getElementById("dear_app").innerHTML = "  &#1066;&#1031;&#1064;&#1030;&#1067;&#1034;&#1065;†&#1065;‡  " + msgbox + "  &#1064;±&#1064;§ &#1065;&#1026;&#1064;§&#1064;±&#1064;&#1031; &#1066;©&#1065;†&#1067;&#1034;&#1064;&#1031; ";
+
+        setVar('run_executer', '0');
+    } else {
+
+        setVar('run_executer', '1');
+    }
+
+    return textcontent;
+
+}
+
+
+function showthisfromid(idname) {
+
+    document.getElementById(idname).style.display = "block";
+
+}
+
+
+
+function if_hide_show(elementid) {
+
+    var x = document.getElementById(elementid);
+    if (window.getComputedStyle(x).display === "none") {
+        x.style.display = "block";
+    }
+
+}
+function if_show_hide(elementid) {
+
+    var x = document.getElementById(elementid);
+
+    if (x.style.display === "block") {
+        x.style.display = "none";
+
+    }
+
+}
+
+
+
+
+
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    var items = location.search.substr(1).split("&");
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=");
+        if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+    }
+    return result;
+}
+
+
+
+
+
+function dashboard_home(param) {
+    // number 1
+    setVar('run_executer', '1');
+    get_https("plt.php" + "?q=" + param);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function data_items(param) {
+
+
+    alert(param);
+
+}
+
+
+
+
+
+
+
+function readFile(input) {
+    let file = input.files[0];
+    var vagr;
+    if (/\.(jpe?g|png|gif)$/i.test(file.name) && file.size < 5000001) {
+        let reader = new FileReader();
+
+        reader.readAsText(file);
+
+        reader.onload = function () {
+            vagr = encodeURIComponent(reader.result);
+
+            console.log(vagr);
+
+        };
+
+        reader.onerror = function () {
+            vagr = reader.error;
+
+        };
+    } else {
+
+        vagr = "file or format problem";
+        console.log(vagr);
+    }
+
+    return vagr;
+}
+
+function getSecondPart(str) {
+    return str.split('-')[1];
+}
+
+function form_submit(formname) {
+
+    gather_form(formname, arguments.callee.name);
+}
+
+function funca() {
+    jalaliDatepicker.startWatch({
+        separatorChar: "/",
+        minDate: "attr",
+        maxDate: "attr",
+        changeMonthRotateYear: true,
+        showTodayBtn: true,
+        showEmptyBtn: true
+    });
+}
+
+/*
+
+var timeout;
+var dearappelement = document.getElementById('dear_app').innertext;
+if (dearappelement == "") {
+    timeout = 10000;
+} else {
+    timeout = 6000;
+}
+*/
+
+function get_https_2(whatfor, datastring, whatafterrun, whatafterrun_2, uuu, ppp) {
+
+
+    fetch(store.devicePlatform + '/' + whatfor, {
+        method: 'POST',
+
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            'username': uuu,
+            'password': ppp,
+            'hash': getOption("hash"),
+            'datacontent': datastring,
+            'o_db': getOption('o_db')
+        }),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+
+            window[whatafterrun](data, whatafterrun_2);
+
+            closeModal();
+
+
+
+        })
+        .catch((err) => console.log(err));
+}
+
+
+function get_https(whatfor, stop, whatafterrun, whatafterrun_2, timetodo, uuu, ppp) {
+
+
+    if (typeof timetodo == 'undefined') {
+        timetodo = 1;
+    }
+
+    timetodo = timetodo + 1;
+
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+    var timeout;
+    var dearappelement = document.getElementById('dear_app').innertext;
+
+
+    if (typeof dearappelement == "undefined") {
+        timeout = 10000;
+    } else {
+        timeout = 6000;
+    }
+
+
+    const myTimeout = setTimeout(() => controller.abort(), timeout);
+
+
+
+
+
+
+    appendd(whatfor, stop, htcss(window.location.href));
+    loading();
+    fetch(store.devicePlatform + '/' + whatfor + "&timetodo=" + timetodo, {
+        method: 'POST',
+        signal: signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            'username': uuu,
+            'password': ppp,
+            'hash': getOption("hash"),
+            'o_db': getOption('o_db')
+        }),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+
+            if (stop != 1) {
+
+                window[whatafterrun](data, whatafterrun_2);
+
+                closeModal();
+                clearTimeout(myTimeout);
+
+
+            } else {
+                clear_loading();
+            }
+        })
+        .catch((status, err) => fail_req(status, err, signal, myTimeout, whatfor, stop, whatafterrun, whatafterrun_2, timetodo));
+
+
+}
+
+function check_https(whatfor, uuu, ppp) {
+
+
+    fetch(store.devicePlatform + '/' + whatfor, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            'username': uuu,
+            'hash': getOption("hash"),
+            'password': ppp
+        }),
+    })
+        .then((res) => res.json()
+        )
+        .then((data) => {
+
+            do_onstart(data);
+
+        })
+        .catch((res) => get_error(store.devicePlatform + '/' + whatfor));
+
+
+
+
+
+}
+
