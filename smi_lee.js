@@ -1,10 +1,5 @@
-/* 
-
- Smi_lee is part of https://github.com/toptunes/Smile_Engine-Demo . This is factory pattern
- author : Mohammad (dehaz) Norouzi 
-
-
- */
+//Smi_lee is part of https://github.com/toptunes/Smile_Engine-Demo . This is factory pattern
+// author : Mohammad (dehaz) Norouzi 
 
 var h_smi_lee = [];
 var do_history = 0;
@@ -23,16 +18,46 @@ var header_save_url = "";
 var rnd_nm_pho = Math.floor(Math.random() * 100000);
 var whatdef_at_end = "";
 
-dear_app = "dear_app"; 
-dear_nav = "dear_nav"; 
+dear_app = "dear_app";
+dear_nav = "dear_nav";
 app_msg = "app_msg";
 whatdef_at_end = "do_after_done";
+
 var store = {};
 setVar('devicePlatform', '/app/views/html');
 
+on_app_RUN(store.devicePlatform + "/mohammad_norouzi_app.php"); // Run application
 
 
-on_app_RUN(store.devicePlatform + "/mohammad_norouzi_app.php"); 
+
+function meta_builder(obj){
+
+    var title = obj.inside_head.title;
+   
+   
+       
+        document.title = title;
+    
+
+    var meta_obj = obj.inside_head.meta_name;
+    
+
+    for (let index = 0; index < meta_obj.length; index++) {
+
+        for (var key in meta_obj[index]) {
+            if (meta_obj[index].hasOwnProperty(key)) {
+
+
+                document.querySelector("meta["+key+"]" ).setAttribute("content", meta_obj[index][key]);
+
+            }
+        }
+    }
+  
+  
+}
+
+
 
 function setOption(key, value) {
     return localStorage.setItem(key, value);
@@ -151,10 +176,10 @@ function alert_2time(param, param2) {
 }
 
 function appendd(whatfor, stop, current_url_dt) {
- /*
+
     current_url = current_url_dt;
 
-   
+    /*
     do_history=1;
 
     var how_many_allowed = 10;
@@ -803,8 +828,11 @@ function do_after_done(result, whatafterrun) {
 
 
 
-
+    
+    meta_builder(obj);
     nav_builder(dear_nav, obj.app_nav);
+
+
 
     ////////////////////////////////
     if (obj.Access == 1) {
