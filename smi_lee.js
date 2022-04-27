@@ -26,7 +26,7 @@ var store = {}; // save things in array
 
 setVar('devicePlatform', '/app/views/html'); // Example of saving in array
 
-on_app_RUN(store.devicePlatform + "/mohammad_norouzi_app.php"); // Put the first view of HTML that we want to play with
+GET_URL(store.devicePlatform + "/mohammad_norouzi_app.php"); // Put the first view of HTML that we want to play with
 
 
 function meta_builder(obj){
@@ -71,7 +71,7 @@ function setVar(varName, varValue) {
     store[varName] = varValue
 }
 
-function on_app_RUN(url) {
+function GET_URL(url) {
 
     fetch(url).then(function (response) {
         // The API call was successful!
@@ -82,8 +82,10 @@ function on_app_RUN(url) {
         clear_loading();
         document.getElementById(app_id).innerHTML = html;
         // do_after_done(html);
-        check_https(index_api_url + "?q=mas");
 
+        GET_METHOD(index_api_url + "?q=mas");
+
+        
 
     }).catch(function (err) {
         // There was an error
@@ -281,7 +283,7 @@ function at_end_login(at_end) {
     var hash = document.getElementById('hash');
     if (usern !== null && hash !== null) {
         var whatfor = index_api_url + "?q=profile&nav=1";
-        get_https(whatfor, 0, whatdef_at_end, null, timetodo, usern.value, passw.value);
+        get_https_2(whatfor, 0, whatdef_at_end, null, usern.value, passw.value);
         setOption("hash", hash.value);
 
         replaceState_me("1", "/profile", "/profile");
@@ -2181,21 +2183,14 @@ function get_https(whatfor, stop, whatafterrun, whatafterrun_2, timetodo, uuu, p
 
 
 
-
-
-
     appendd(whatfor, stop, htcss(window.location.href));
     loading();
+
+
     fetch(store.devicePlatform + '/' + whatfor + "&timetodo=" + timetodo, {
-        method: 'POST',
+        method: 'GET',
         signal: signal,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            'username': uuu,
-            'password': ppp,
-            'hash': getOption("hash"),
-            'o_db': getOption('o_db')
-        }),
     })
         .then((res) => res.json())
         .then((data) => {
@@ -2215,19 +2210,17 @@ function get_https(whatfor, stop, whatafterrun, whatafterrun_2, timetodo, uuu, p
         .catch((status, err) => fail_req(status, err, signal, myTimeout, whatfor, stop, whatafterrun, whatafterrun_2, timetodo));
 
 
+
+        
+
 }
 
-function check_https(whatfor, uuu, ppp) {
+function GET_METHOD(whatfor) {
 
 
     fetch(store.devicePlatform + '/' + whatfor, {
-        method: 'POST',
+        method: "GET",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            'username': uuu,
-            'hash': getOption("hash"),
-            'password': ppp
-        }),
     })
         .then((res) => res.json()
         )
